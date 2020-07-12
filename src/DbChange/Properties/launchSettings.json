@@ -1,0 +1,24 @@
+{
+	"profiles": {
+		"up-dev": {
+			"commandName": "Project",
+			"commandLineArgs": "up --path ./tests --engine mssql --connection $DS8_CHANGE_DEV",
+			"workingDirectory": "."
+		},
+		"up-staging": {
+			"commandName": "Project",
+			"commandLineArgs": "up --path ./tests --engine mssql --connection $DS8_CHANGE_STAGE",
+			"workingDirectory": "."
+		},
+		"up-prod": {
+			"commandName": "Project",
+			"commandLineArgs": "up --path ./tests --engine mssql --connection $DS8_CHANGE_PROD",
+			"workingDirectory": "."
+		},
+		"script-dev": {
+			"commandName": "Project",
+			"commandLineArgs": "script --path ./test-schema-out --engine mssql --connection $DS8_CHANGE_DEV",
+			"workingDirectory": "."
+		}
+	}
+}
