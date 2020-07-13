@@ -14,5 +14,6 @@ ADD . /db-change
 WORKDIR /db-change
 
 RUN chmod +x db-change
+RUN chmod +x action-runner.sh
 
 WORKDIR /

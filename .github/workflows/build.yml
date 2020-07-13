@@ -17,6 +17,7 @@ jobs:
         run: |
           echo "Building dotnet..."
           dotnet publish ./src/DbChange/DbChange.csproj -r linux-musl-x64 -c Release -o ./bin
+          cp action-runner.sh ./bin/action-runner.sh
 
       - name: build-image
         env:

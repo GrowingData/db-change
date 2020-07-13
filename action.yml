@@ -30,12 +30,17 @@ inputs:
     description: "The path to write the current schema to"
     required: true
     default: ""
-
 outputs:
   time: # id of output
     description: "The time we greeted you"
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "growingdata/db-change-dev"
   args:
-    - ${{ inputs.connection-string }}
+    - ${{ inputs.db-connection }}
+    - ${{ inputs.db-environment }}
+    - ${{ inputs.path-dbup-scripts }}
+    - ${{ inputs.path-schema-scripts }}
+    - ${{ inputs.git-schema-branch }}
+    - ${{ inputs.git-email }}
+    - ${{ inputs.git-name }}
