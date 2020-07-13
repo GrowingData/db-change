@@ -1,7 +1,7 @@
 name: build-release
 on: push
 jobs:
-  build:
+  build-release:
     runs-on: [ubuntu-20.04]
     container:
       image: docker.io/growingdata/ds8-cicd:1.0.0
@@ -48,11 +48,6 @@ jobs:
           docker push $IMAGE_DBCHANGE_DEV:$SHORT_SHA
           docker push $IMAGE_DBCHANGE_DEV
 
-  release:
-    runs-on: [ubuntu-20.04]
-    container:
-      image: docker.io/growingdata/ds8-cicd:1.0.0
-    steps:
       - name: release-db-change
         if: contains(github.ref, 'tags')
         env:
