@@ -1,0 +1,41 @@
+# action.yml
+name: "DbChange Action"
+description: "Run DbUp and re-generate database schema scripts"
+inputs:
+  connection-string:
+    description: "The ADO.Net connection string to connect to your database"
+    required: true
+    default: ""
+  database-environment:
+    description: "The name of the environment (dev/stage/prod) we are operating in"
+    required: true
+    default: "dev"
+  git-email:
+    description: "The email of the identity to use when commiting schema changes"
+    required: false
+    default: "dbchange@datasubstrate.com"
+  git-name:
+    description: "The name of the identity to use when commiting schema changes"
+    required: false
+    default: "DbChange Robot"
+  github-token:
+    description: "The token to use for interfacing with GitHub (${{ secrets.GITHUB_TOKEN }})"
+    required: true
+    default: ""
+  path-dbup-scripts:
+    description: "The path to the scripts used to upgrade the database"
+    required: true
+    default: ""
+  path-schema-scripts:
+    description: "The path to write the current schema to"
+    required: true
+    default: ""
+
+outputs:
+  time: # id of output
+    description: "The time we greeted you"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.connection-string }}
