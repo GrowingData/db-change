@@ -1,11 +1,11 @@
-name: deploy
+name: release
 
 on:
   push:
     tags:
-
+      - "v*"
 jobs:
-  deploy:
+  release:
     runs-on: [ubuntu-20.04]
     container:
       image: docker.io/growingdata/ds8-cicd:1.0.0
@@ -19,7 +19,7 @@ jobs:
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
 
       # Deploy my image as teh release image
-      - name: deploy-prod
+      - name: release-prod
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
@@ -31,6 +31,7 @@ jobs:
 
           docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
 
+          # Grab the built image
           docker pull $IMAGE_DBCHANGE_DEV:SHORT_SHA
 
           # Push the version tagged image
