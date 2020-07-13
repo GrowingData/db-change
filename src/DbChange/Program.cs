@@ -16,7 +16,7 @@ namespace GrowingData.DbChange {
 				.WriteTo.Console(theme: AnsiConsoleTheme.Literate)
 				.CreateLogger();
 
-			Log.Information("ds8-change: Starting");
+			Log.Information("db-change: Starting");
 			var result = Parser.Default.ParseArguments<UpgradeCliOptions, ScriptCliOptions>(args)
 				.MapResult(
 					(UpgradeCliOptions o) => Upgrade(o),
@@ -26,11 +26,11 @@ namespace GrowingData.DbChange {
 
 
 			if (result == 0) {
-				Log.Information("ds-change: Success!");
+				Log.Information("db-change: Success!");
 				return 0;
 			}
 
-			Log.Information("ds-change: Failed, exiting");
+			Log.Information("db-change: Failed, exiting");
 			return -1;
 		}
 

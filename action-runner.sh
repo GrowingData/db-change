@@ -26,7 +26,7 @@ git pull --unshallow
 echo "Running db-change up... (from ${PATH_DBUP})"
 db-change up --path "$PATH_DBUP" --engine mssql --connection "$DB_CONNECTION"
 
-echo "Generating full scripts for environment: ${DB_ENVIRONMENT} in ${$PATH_SCHEMA}"
+echo "Generating full scripts for environment: ${DB_ENVIRONMENT} in ${PATH_SCHEMA}"
 db-change script --path "$PATH_SCHEMA" --engine mssql --connection "$DB_CONNECTION"
 
 export CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
