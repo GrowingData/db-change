@@ -48,14 +48,18 @@ jobs:
           docker push $IMAGE_DBCHANGE_DEV:$SHORT_SHA
           docker push $IMAGE_DBCHANGE_DEV
 
-      - name: release
+  release:
+    runs-on: [ubuntu-20.04]
+    container:
+      image: docker.io/growingdata/ds8-cicd:1.0.0
+    steps:
+      - name: release-db-change
         if: contains(github.ref, 'tags')
         env:
           IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
           IMAGE_DBCHANGE_RELEASE: ${{ secrets.IMAGE_DBCHANGE_RELEASE }}
         run: |
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
-          VERSION=${{ steps.get_version.outputs.VERSION }}
 
           # Grab the built image
           docker pull $IMAGE_DBCHANGE_DEV:$SHORT_SHA
@@ -68,19 +72,15 @@ jobs:
           docker tag $IMAGE_DBCHANGE_DEV:$SHORT_SHA $IMAGE_DBCHANGE_RELEASE
           docker push $IMAGE_DBCHANGE_RELEASE
 
-      - name: release-base-image
+      - name: release-action-base
         if: contains(github.ref, 'tags')
-        env:
-          IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
-          IMAGE_DBCHANGE_RELEASE: ${{ secrets.IMAGE_DBCHANGE_RELEASE }}
         run: |
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
-          VERSION=${{ steps.get_version.outputs.VERSION }}
 
-          # Grab the built image
-          docker build -t growingdata/github-action-base:$VERSION -f ./src/docker/action-base.Dockerfile ./src/docker/
+          # Build action-base
+          docker build -t growingdata/github-action-base:$RELEASE_VERSION -f ./src/docker/action-base.Dockerfile ./src/docker/
 
           # Push the version tagged image
-          docker tag growingdata/github-action-base:$VERSION growingdata/github-action-base
-          docker push growingdata/github-action-base:$VERSION
+          docker tag growingdata/github-action-base:$RELEASE_VERSION growingdata/github-action-base
+          docker push growingdata/github-action-base:$RELEASE_VERSION
           docker push growingdata/github-action-base
