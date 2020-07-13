@@ -35,7 +35,7 @@ outputs:
     description: "The time we greeted you"
 runs:
   using: "docker"
-  image: "docker://growingdata/db-change:v1.0.3"
+  image: "docker://growingdata/db-change:v1.0.4"
   entrypoint: "/db-change/action-runner.sh"
   args:
     - ${{ inputs.db-connection }}
