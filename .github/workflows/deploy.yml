@@ -6,7 +6,8 @@ on:
       - "master"
 
 jobs:
-  apply-schema-changes:
+  deploy:
+    runs-on: [ubuntu-20.04]
     container:
       image: docker.io/growingdata/ds8-cicd:1.0.0
     steps:

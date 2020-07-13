@@ -1,9 +1,13 @@
 name: db-schema-prod
 
 on: push
+  push:
+    branches:
+      - "feature/**"
 
 jobs:
-  apply-schema-changes:
+  build:
+    runs-on: [ubuntu-20.04]
     container:
       image: docker.io/growingdata/ds8-cicd:1.0.0
     steps:
