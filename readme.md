@@ -11,30 +11,37 @@ DbChange also exports the schema of your database after it applies each change, 
 
 ## Supported databases
 
-At the moment we only support Microsoft SQL Server, but plan support for Postgresql soon.
+At the moment we only support Microsoft SQL Server, but plan support for PostgreSQL soon.
 
 ## Parameters:
 
-_db-connection_
+### db-connection
+
 The ADO.Net connection string, which looks something like:
 `Server=localhost;Initial Catalog=<DATABASE_NAME>;User ID=<USERNAME>;Password=<PASSWORD>;Connection Timeout=5;`
 
-_db-environment_
+### db-environment
+
 The name of the environment you are managing with this action. Typically this will be something like "dev", "prod", "staging"
 
-_path-dbup-scripts_
+### path-dbup-scripts
+
 The path to a directory containing .sql scripts to be used to upgrade the schema of the database. Scripts here should be named such that they are always well ordered, as there sort order will determine their execution order. A good pattern to use here is to name your files `{yyyy-MM-dd}-{sequence-numeber}-{obj-name}.sql`, where an example might be: `2020-04-11-003-product_category.sql`.
 
-_path-schema-scripts_
+### path-schema-scripts
+
 The path that DbChange will use to write your latest set of schema files (with one file per object).
 
-_git-schema-branch_
+### git-schema-branch
+
 The branch to use to write changes to the database schema.
 
-_git-email_
+### git-email
+
 The email address of the git identity used to apply the changes
 
-_git-name_
+### git-name
+
 The name of the git identity used to apply the changes.
 
 ## Usage in GitHub Actions
