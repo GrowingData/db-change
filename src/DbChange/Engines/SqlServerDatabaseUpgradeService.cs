@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DbUp;
 using DbUp.ScriptProviders;
 using System.Data.SqlClient;
@@ -32,20 +33,62 @@ namespace GrowingData.DbChange {
 					return true;
 				}
 			};
+			var customLogger = new DbUpLogger();
 			var upgrader =
 				DeployChanges.To
 					.SqlDatabase(connectionString)
 					//.WithScripts(provider)
 					.WithScriptsFromFileSystem(scriptPathInfo.FullName, fsOptions)
-					.LogToAutodetectedLog()
+					//.LogToAutodetectedLog()
+					.LogToNowhere()
+					.LogTo(customLogger)
 					.Build();
 
 			var result = upgrader.PerformUpgrade();
 			if (!result.Successful) {
-				Log.Error(result.Error, "DatabaseUpgradeService.UpgradeSchema Failed: {message}\r\n {stack}", result.Error.Message, result.Error.StackTrace);
+				var scripts = customLogger.BrokenScripts;
+				var sqlException = result.Error as SqlException;
+
+				var scriptName = "unknown";
+				if (scripts.Count > 0){
+					scriptName = scripts.FirstOrDefault();
+				}
+
+				Log.Error("UpgradeSchema failed: {message} in {scriptName} (Line number: {lineNumber})", 
+					result.Error.Message, scriptName, sqlException.LineNumber);
 				return false;
 			}
 			return true;
+		}
+	}
+	public class DbUpLogger : DbUp.Engine.Output.IUpgradeLog {
+		public List<string> BrokenScripts = new List<string>();
+
+		public void WriteError(string format, params object[] args) {
+			// The error messages here contain a lot of junk I am not interested in
+			return;
+			Log.Error(format, args);
+			//throw new NotImplementedException();
+		}
+
+		public void WriteInformation(string format, params object[] args) {
+			if (format == "SQL exception has occured in script: '{0}'") {
+				BrokenScripts.Add((string)args[0]);
+				Log.Error(format, args);
+				return;
+			}
+			if (format == "DB exception has occured in script: '{0}'") {
+				// We will have already logged it as above...
+				return;
+			}
+
+			Log.Information(format, args);
+
+		}
+
+		public void WriteWarning(string format, params object[] args) {
+			Log.Warning(format, args);
+			//throw new NotImplementedException();
 		}
 	}
 
