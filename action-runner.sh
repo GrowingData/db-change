@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 DB_CONNECTION=$1
 DB_ENVIRONMENT=$2
