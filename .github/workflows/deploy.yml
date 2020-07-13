@@ -2,8 +2,7 @@ name: deploy
 
 on:
   push:
-    branches:
-      - "master"
+    tags:
 
 jobs:
   deploy:
@@ -15,21 +14,29 @@ jobs:
       - name: checkout-code
         uses: actions/checkout@v2
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
       # Deploy my image as teh release image
-      - name: deploy
+      - name: deploy-prod
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
           IMAGE_DBCHANGE_RELEASE: ${{ secrets.IMAGE_DBCHANGE_RELEASE }}
-          IMAGE_VERSION: ${{ secrets.IMAGE_VERSION }}
         run: |
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+
           docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
 
           docker pull $IMAGE_DBCHANGE_DEV:SHORT_SHA
-          docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE:$IMAGE_VERSION
-          docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE
 
-          docker push $IMAGE_DBCHANGE_RELEASE:$IMAGE_VERSION
+          # Push the version tagged image
+          docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE:$VERSION
+          docker push $IMAGE_DBCHANGE_RELEASE:$VERSION
+
+          # Push the "latest" tag
+          docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE
           docker push $IMAGE_DBCHANGE_RELEASE
