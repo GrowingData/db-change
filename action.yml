@@ -36,6 +36,7 @@ outputs:
 runs:
   using: "docker"
   image: "docker://growingdata/db-change-dev:9b0a35f"
+  entrypoint: "action-runner.sh"
   args:
     - ${{ inputs.db-connection }}
     - ${{ inputs.db-environment }}
