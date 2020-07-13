@@ -27,7 +27,7 @@ echo "Running db-change up..."
 db-change up --path "$PATH_DBUP" --engine mssql --connection "$DB_CONNECTION"
 
 echo "Generating full scripts for environment: ${DB_ENVIRONMENT}"
-ds8-db script --path "$PATH_SCHEMA" --engine mssql --connection "$DB_CONNECTION"
+db-change script --path "$PATH_SCHEMA" --engine mssql --connection "$DB_CONNECTION"
 
 export CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
 echo "Pushing local changes from: ${CURRENT_BRANCH}"

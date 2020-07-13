@@ -8,7 +8,7 @@ RUN apk update && apk upgrade && \
 
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
-ENV PATH="/ds8:${PATH}"
+ENV PATH="/db-change:${PATH}"
 
 ADD . /db-change
 WORKDIR /db-change
