@@ -43,7 +43,7 @@ jobs:
           docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
           docker push $IMAGE_DBCHANGE_DEV:$SHORT_SHA
 
-      - name: Get the version
+      - name: get-version
         id: get_version
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
 
