@@ -11,7 +11,7 @@ DbChange also exports the schema of your database after it applies each change, 
 
 ## Supported databases
 
-At the moment we only support Microsoft SQL Server, but plan support for Postgresql soon.
+At the moment we only support Microsoft SQL Server, but plan support for PostgreSQL soon.
 
 ## Parameters:
 
