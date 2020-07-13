@@ -21,8 +21,6 @@ jobs:
 
       - name: build-image
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
         run: |
           echo "Building image..."
@@ -30,16 +28,21 @@ jobs:
           docker build -t $IMAGE_DBCHANGE_DEV:$SHORT_SHA -f ./src/docker/db-change.Dockerfile ./bin
           docker tag $IMAGE_DBCHANGE_DEV:$SHORT_SHA $IMAGE_DBCHANGE_DEV
 
-      - name: docker-push
+      - name: docker-login
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          echo "Docker config"
+          docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
+
+      - name: docker-push
+        env:
           IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
 
         run: |
           echo "Pushing dev image to dockerhub..."
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
-          docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
           docker push $IMAGE_DBCHANGE_DEV:$SHORT_SHA
           docker push $IMAGE_DBCHANGE_DEV
 
@@ -50,15 +53,11 @@ jobs:
       - name: release
         if: contains(github.ref, 'tags')
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
           IMAGE_DBCHANGE_RELEASE: ${{ secrets.IMAGE_DBCHANGE_RELEASE }}
         run: |
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
           VERSION=${{ steps.get_version.outputs.VERSION }}
-
-          docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
 
           # Grab the built image
           docker pull $IMAGE_DBCHANGE_DEV:$SHORT_SHA
@@ -70,3 +69,20 @@ jobs:
           # Push the "latest" tag
           docker tag $IMAGE_DBCHANGE_DEV:$SHORT_SHA $IMAGE_DBCHANGE_RELEASE
           docker push $IMAGE_DBCHANGE_RELEASE
+
+      - name: release-base-image
+        if: contains(github.ref, 'tags')
+        env:
+          IMAGE_DBCHANGE_DEV: ${{ secrets.IMAGE_DBCHANGE_DEV }}
+          IMAGE_DBCHANGE_RELEASE: ${{ secrets.IMAGE_DBCHANGE_RELEASE }}
+        run: |
+          SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+
+          # Grab the built image
+          docker build -t growingdata/github-action-base:$VERSION -f ./src/docker/action-base.Dockerfile ./src/docker/
+
+          # Push the version tagged image
+          docker tag growingdata/github-action-base:$VERSION growingdata/github-action-base
+          docker push growingdata/github-action-base:$VERSION
+          docker push growingdata/github-action-base

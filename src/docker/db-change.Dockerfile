@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/dotnet/core/runtime-deps:3.1-alpine
+LABEL maintainer Terence Siganakis <terence@growingdata.com.au>
 
 RUN apk update && apk upgrade && \
     apk add --no-cache \
