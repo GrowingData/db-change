@@ -1,6 +1,6 @@
-name: db-schema-prod
+name: build
 
-on: push
+on:
   push:
     branches:
       - "feature/**"
