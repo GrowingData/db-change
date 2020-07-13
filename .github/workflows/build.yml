@@ -58,7 +58,7 @@ jobs:
           docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
 
           # Grab the built image
-          docker pull $IMAGE_DBCHANGE_DEV:SHORT_SHA
+          docker pull $IMAGE_DBCHANGE_DEV:$SHORT_SHA
 
           # Push the version tagged image
           docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE:$RELEASE_VERSION
