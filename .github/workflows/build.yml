@@ -61,9 +61,9 @@ jobs:
           docker pull $IMAGE_DBCHANGE_DEV:$SHORT_SHA
 
           # Push the version tagged image
-          docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE:$RELEASE_VERSION
+          docker tag $IMAGE_DBCHANGE_DEV:$SHORT_SHA $IMAGE_DBCHANGE_RELEASE:$RELEASE_VERSION
           docker push $IMAGE_DBCHANGE_RELEASE:$RELEASE_VERSION
 
           # Push the "latest" tag
-          docker tag $IMAGE_DBCHANGE_DEV:SHORT_SHA $IMAGE_DBCHANGE_RELEASE
+          docker tag $IMAGE_DBCHANGE_DEV:$SHORT_SHA $IMAGE_DBCHANGE_RELEASE
           docker push $IMAGE_DBCHANGE_RELEASE
