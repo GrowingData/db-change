@@ -21,7 +21,7 @@ inputs:
   git-schema-branch:
     description: "The branch use when commiting schema changes"
     required: false
-    default: "master"ls 
+    default: "master"
   git-email:
     description: "The email of the identity to use when commiting schema changes"
     required: false
