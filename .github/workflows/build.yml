@@ -17,6 +17,7 @@ jobs:
         run: |
           echo "Building dotnet..."
           dotnet publish ./src/DbChange/DbChange.csproj -r linux-musl-x64 -c Release -o ./bin
+          cp action-runner.sh ./bin/action-runner.sh
 
       - name: build-image
         env:
@@ -27,6 +28,7 @@ jobs:
           echo "Building image..."
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
           docker build -t $IMAGE_DBCHANGE_DEV:$SHORT_SHA -f ./src/docker/db-change.Dockerfile ./bin
+          docker tag $IMAGE_DBCHANGE_DEV:$SHORT_SHA $IMAGE_DBCHANGE_DEV
 
       - name: docker-push
         env:
@@ -39,6 +41,7 @@ jobs:
           SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")
           docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD docker.io
           docker push $IMAGE_DBCHANGE_DEV:$SHORT_SHA
+          docker push $IMAGE_DBCHANGE_DEV
 
       - name: get-version
         id: get_version
