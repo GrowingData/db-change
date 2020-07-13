@@ -48,7 +48,7 @@ jobs:
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
 
       - name: release
-        if: contains(github.ref, "tags/v")
+        if: contains(github.ref, 'tags')
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
