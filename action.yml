@@ -19,7 +19,7 @@ inputs:
     required: false
     default: "DbChange Robot"
   github-token:
-    description: "The token to use for interfacing with GitHub (${{ secrets.GITHUB_TOKEN }})"
+    description: "The token to use for interfacing with GitHub"
     required: true
     default: ""
   path-dbup-scripts:
