@@ -18,13 +18,14 @@ git config --local user.name "$GIT_NAME"
 # Only allow fast forwards when merging
 git config pull.ff only
 
+
+echo "Running db-change up... (from ${PATH_DBUP})"
+db-change up --path "$PATH_DBUP" --engine mssql --connection "$DB_CONNECTION"
+
 echo "Checking out schema branch: ${GIT_BRANCH}"
 git fetch
 git checkout $GIT_BRANCH
 git pull --unshallow
-
-echo "Running db-change up... (from ${PATH_DBUP})"
-db-change up --path "$PATH_DBUP" --engine mssql --connection "$DB_CONNECTION"
 
 echo "Generating full scripts for environment: ${DB_ENVIRONMENT} in ${PATH_SCHEMA}"
 db-change script --path "$PATH_SCHEMA" --engine mssql --connection "$DB_CONNECTION"
