@@ -1,6 +1,6 @@
 # DbChange
 
-DbChange is a simple tool for managing database schema changes. Leveraging DbUp, DbChange provides a simple way to run database upgrade scripts to do things like:
+DbChange is a simple tool for managing database schema changes, created by [Growing Data](https://growingdata.com.au). Leveraging DbUp, DbChange provides a simple way to run database upgrade scripts to do things like:
 
 - Create tables
 - Add columns
@@ -85,3 +85,7 @@ jobs:
           git-email: "schema-sync@growingdata.com.au"
           git-name: "Schema Robot"
 ```
+
+## About Growing Data
+
+Growing Data is a Melbourne based consultancy, focussed on [AI & Machine Learning](https://growingdata.com.au/data-services/ai-and-machine-learning/), [Data Engineering](https://growingdata.com.au/data-services/data-engineering/) and [Data Strategy & Governance](https://growingdata.com.au/data-services/data-strategy/).
